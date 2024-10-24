@@ -1,8 +1,16 @@
 import requests
 import os
 from dotenv import load_dotenv
+from geopy.geocoders import Photon
 
 load_dotenv()
+geolocator = Photon(user_agent="measurements")
+location = geolocator.geocode("me")
+if location:
+    print("Latitude:", location.latitude)
+    print("Longitude:", location.longitude)
+else:
+    print("Unable to determine location.")
 
 access_key = os.getenv('ACCESS_KEY')
 
@@ -11,7 +19,6 @@ if access_key is None:
 else:
     params = {
         'access_key': access_key,
-        'airline_iata': 'EK'  
     }
 
     api_result = requests.get('https://api.aviationstack.com/v1/flights', params)
